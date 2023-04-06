@@ -2,7 +2,7 @@
 
 Code repository for reproducing the simulation studies in the paper
 
-Ramdas, A. and Manole, T. (2023). Randomized and Exchangeable Improvements of Markov’s, Chebyshev’s and Chernoff’s Inequalities. _arXiv preprint._
+Ramdas, A. and Manole, T. (2023). [Randomized and Exchangeable Improvements of Markov’s, Chebyshev’s and Chernoff’s Inequalities](https://arxiv.org/abs/2304.02611). _arXiv preprint arXiv:2304.02611_.
 
 ## Dependencies
 

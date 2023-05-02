@@ -20,7 +20,7 @@ p_ville = np.load("matrices/betting/power_ville.npy")/reps
 p_dtr = np.load("matrices/betting/power_dtr.npy")/reps
 p_umi = np.load("matrices/betting/power_umi.npy")/reps
 p_emi = np.load("matrices/betting/power_emi.npy")/reps
-p_rmi = np.load("matrices/betting/power_emi.npy")/reps
+p_rmi = np.load("matrices/betting/power_rmi.npy")/reps
 
 mats = {"p_ville": p_ville, "p_dtr": p_dtr, "p_umi": p_umi, "p_emi": p_emi, "p_rmi": p_rmi}
 
@@ -38,7 +38,6 @@ mats = {"p_ville": p_ville, "p_dtr": p_dtr, "p_umi": p_umi, "p_emi": p_emi, "p_r
 ### Combine above plots
 
 from mpl_toolkits.axes_grid1 import ImageGrid
-
 
 fig = plt.figure(1,figsize=(4.,4.))
 grid = ImageGrid(fig, 111,          
@@ -138,7 +137,7 @@ grid = ImageGrid(fig, 111,
                  )
 i = 0
     
-vmax=np.max([p_umi-p_dtr,p_umi-p_ville]) #0.082#np.max([p_emi-p_ville,p_emi-p_dtr])
+vmax=np.max([p_umi-p_dtr,p_umi-p_ville,p_rmi-p_dtr,p_rmi-p_ville]) #0.082#np.max([p_emi-p_ville,p_emi-p_dtr])
 vmin=-vmax
 
 for ax, im in zip(grid, [(p_emi-p_dtr),(p_emi-p_ville)]):
@@ -254,8 +253,7 @@ i = 0
    
 print(p_emi-p_rmi)
 for ax, im in zip(grid, [(p_rmi-p_dtr),(p_rmi-p_ville)]):
-    im = ax.imshow(im, interpolation="nearest",vmin=-vmax,vmax=vmax,cmap="bwr")
-
+    im = ax.imshow(im, interpolation="nearest",vmin=0,vmax=vmax,cmap=cmap2)
     plt.sca(ax)
 
     plt.yticks(idm, print_ns)

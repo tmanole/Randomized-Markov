@@ -20,8 +20,9 @@ p_ville = np.load("matrices/betting/power_ville.npy")/reps
 p_dtr = np.load("matrices/betting/power_dtr.npy")/reps
 p_umi = np.load("matrices/betting/power_umi.npy")/reps
 p_emi = np.load("matrices/betting/power_emi.npy")/reps
+p_rmi = np.load("matrices/betting/power_emi.npy")/reps
 
-mats = {"p_ville": p_ville, "p_dtr": p_dtr, "p_umi": p_umi, "p_emi": p_emi}
+mats = {"p_ville": p_ville, "p_dtr": p_dtr, "p_umi": p_umi, "p_emi": p_emi, "p_rmi": p_rmi}
 
 ### Make individual plots
 
@@ -39,15 +40,15 @@ mats = {"p_ville": p_ville, "p_dtr": p_dtr, "p_umi": p_umi, "p_emi": p_emi}
 from mpl_toolkits.axes_grid1 import ImageGrid
 
 
-fig = plt.figure(figsize=(4., 4.))
+fig = plt.figure(1,figsize=(4.,4.))
 grid = ImageGrid(fig, 111,          
-                 nrows_ncols=(1, 4),
+                 nrows_ncols=(1,3),
                  axes_pad=0.1,      
                  direction="row",
                  cbar_location="right",
                  cbar_mode="single",
                  cbar_size="10%",
-                 cbar_pad=0.05,
+                 cbar_pad=0.05
                  )
 
 round_ns = ns
@@ -61,8 +62,8 @@ print_ns = round_ns[idm]
 print_bs = round_bs[idr]
 
 i = 0
-titles= ["Av+MI","Ville","EMI","UMI"]
-the_ps = [p_dtr,p_ville,p_emi,p_umi]
+titles= ["Av+MI","Ville","EMI"]
+the_ps = [p_dtr,p_ville,p_emi,p_umi,p_rmi]
 for ax, im in zip(grid, the_ps):
     im = ax.imshow(im,cmap=cmap2,interpolation='nearest',vmin=0,vmax=np.max(the_ps))   
 
@@ -78,13 +79,44 @@ for ax, im in zip(grid, the_ps):
     plt.title(titles[i])
     i += 1
 
-
 ax.cax.colorbar(im)#,ticks=[0,.2,.5,.8,1])#,label=["0",".2",".5",".8","1"])
 ax.cax.toggle_label(True)
 
-plt.savefig("plots/betting_all.pdf", bbox_inches = 'tight',pad_inches = 0)
+plt.savefig("plots/betting_all1.pdf", bbox_inches = 'tight',pad_inches = 0)
 plt.clf()
 
+fig = plt.figure(1,figsize=(4.,4.))
+grid = ImageGrid(fig, 111,          
+                 nrows_ncols=(1,3),
+                 axes_pad=0.1,      
+                 direction="row",
+                 )
+
+i = 0
+titles= ["UMI","EUMI",""]
+the_ps = [p_umi,p_rmi,p_rmi]
+for ax, im in zip(grid, the_ps):
+    im = ax.imshow(im,cmap=cmap2,interpolation='nearest',vmin=0,vmax=np.max(the_ps))   
+
+    plt.sca(ax)
+
+    plt.yticks(idm, print_ns, fontsize=5)
+    plt.xticks(idr, print_bs, fontsize=5)
+
+    if i == 0:
+        plt.ylabel("$n$")
+
+    plt.xlabel("$b$")
+    plt.title(titles[i])
+    i += 1
+
+ax.set_visible(False)
+
+#ax.cax.colorbar(im)#,ticks=[0,.2,.5,.8,1])#,label=["0",".2",".5",".8","1"])
+ax.cax.toggle_label(True)
+
+plt.savefig("plots/betting_all2.pdf", bbox_inches = 'tight',pad_inches = 0)
+plt.clf()
 
 ### Plot differences in power between EMI & MI or Ville 
 
@@ -204,3 +236,45 @@ ax.cax.toggle_label(True)
 
 plt.savefig("plots/betting_diffs_Ville_MI.pdf", bbox_inches = 'tight',pad_inches = 0)
 plt.clf()
+
+
+### Plot differences in power between EUMI & MI or Ville 
+
+fig = plt.figure(figsize=(4., 4.))
+grid = ImageGrid(fig, 111,
+                 nrows_ncols=(1, 2),
+                 axes_pad=0.1,
+                 direction="row",
+                 cbar_location="right",
+                 cbar_mode="single",
+                 cbar_size="10%",
+                 cbar_pad=0.05,
+                 )
+i = 0
+   
+print(p_emi-p_rmi)
+for ax, im in zip(grid, [(p_rmi-p_dtr),(p_rmi-p_ville)]):
+    im = ax.imshow(im, interpolation="nearest",vmin=-vmax,vmax=vmax,cmap="bwr")
+
+    plt.sca(ax)
+
+    plt.yticks(idm, print_ns)
+    plt.xticks(idr, print_bs)
+
+    if i == 1:
+        plt.title("EUMI vs. Ville")
+        plt.xlabel("$b$")
+
+    else:
+        plt.title("EUMI vs. Av+MI")
+        plt.xlabel("$b$")
+        plt.ylabel("$n$")
+
+    i += 1
+
+ax.cax.colorbar(im)#ticks)#=[vmin,0,.2,.5,.8,vmax])#,label=["0",".2",".5",".8","1"])
+ax.cax.toggle_label(True)
+
+plt.savefig("plots/betting_diffs_EUMI.pdf", bbox_inches = 'tight',pad_inches = 0)
+plt.clf()
+

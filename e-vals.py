@@ -1,6 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from defs import *
+import pathlib
+
+pathlib.Path("matrices/e_vals").mkdir(parents=True, exist_ok=True) 
 
 def generate_e_values(mu, rho, seed):
 	cov = np.array([[1,rho],[rho,1]])
@@ -17,6 +20,7 @@ seed = 0
 p_dtr = np.empty([M, R])
 p_emi = np.empty([M, R])
 p_umi = np.empty([M, R])
+p_rmi = np.empty([M, R]) # EMI + UMI
 
 i = 0
 j = 0
@@ -54,10 +58,15 @@ for mu in mus:
 
 			if pe1 >= 1.0/alpha or (pe1+pe2)/2 >= 1.0/alpha:
 				emi += 1
+
+			if pe1 >= u/alpha or (pe1+pe2)/2 >= 1.0/alpha:
+				rmi += 1
+
 		
 		p_dtr[i,j] = dtr	
 		p_umi[i,j] = umi	
 		p_emi[i,j] = emi	
+		p_rmi[i,j] = rmi	
 
 		j += 1
 	j = 0
@@ -68,7 +77,9 @@ for mu in mus:
 print(p_dtr/reps)
 print(p_emi/reps)
 print(p_umi/reps)
+print(p_rmi/reps)
 
 np.save("matrices/e_vals/power_dtr.npy", p_dtr)
 np.save("matrices/e_vals/power_umi.npy", p_umi)
 np.save("matrices/e_vals/power_emi.npy", p_emi)
+np.save("matrices/e_vals/power_rmi.npy", p_rmi)

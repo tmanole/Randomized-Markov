@@ -12,6 +12,7 @@ p_umi_ui     = np.zeros((n_mods,reps))
 p_sub_ui     = np.zeros((n_mods,reps))
 p_umi_sub_ui = np.zeros((n_mods,reps))
 p_emi_sub_ui = np.zeros((n_mods,reps))
+p_rmi_sub_ui = np.zeros((n_mods,reps))
 
 # 1-alpha quantile of (1/2) \chi_0^2 + (1/2) \chi_1^2
 qchi = chi2.ppf(1-2.0*alpha,1)  
@@ -51,6 +52,9 @@ for rep in range(reps):
 
         ## EMI Subsampling UI
         p_emi_sub_ui[j,rep] = np.max(sub_slrt) > 1.0/alpha     
+
+        ## EMI+UMI Subsampling UI
+        p_rmi_sub_ui[j,rep] = (sub_slrt[0] > u/alpha) or (np.max(sub_slrt) > 1.0/alpha)
         
         ctr +=1
 
@@ -61,6 +65,7 @@ for rep in range(reps):
         print("SUI  ", np.sum(p_sub_ui,axis=1))
         print("SUMI ", np.sum(p_umi_sub_ui,axis=1))
         print("SEMI ", np.sum(p_emi_sub_ui,axis=1))
+        print("SEUMI", np.sum(p_rmi_sub_ui,axis=1))
 
 np.save("matrices/ui/power_lrt.npy", p_lrt)	
 np.save("matrices/ui/power_ui.npy", p_ui)	
@@ -68,3 +73,4 @@ np.save("matrices/ui/power_umi_ui.npy", p_umi_ui)
 np.save("matrices/ui/power_sub_ui.npy", p_sub_ui)	
 np.save("matrices/ui/power_umi_sub_ui.npy", p_umi_sub_ui)	
 np.save("matrices/ui/power_emi_sub_ui.npy", p_emi_sub_ui)	
+np.save("matrices/ui/power_rmi_sub_ui.npy", p_rmi_sub_ui)	

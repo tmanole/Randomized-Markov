@@ -13,6 +13,7 @@ print("betas ", b)
 dtr = np.zeros((n_ns, n_mods))
 emi = np.zeros((n_ns, n_mods))
 umi = np.zeros((n_ns, n_mods))
+rmi = np.zeros((n_ns, n_mods))  # EMI+UMI
 ville = np.zeros((n_ns, n_mods))
 
 j=0
@@ -42,7 +43,8 @@ for i in range(n_ns):
             
             mgale_max = np.max([csum[b]/(b+1) for b in range(B)])
             emi[i,j] += mgale_max > 1.0/alpha
-            
+            rmi[i,j] += (csum[0] > 1.0*u/alpha) or (mgale_max > 1.0/alpha)
+
             ctr +=1
 
     print("dtr")
@@ -53,9 +55,12 @@ for i in range(n_ns):
     print(emi)
     print("ville")
     print(ville)
+    print("rmi")
+    print(rmi)
  
 np.save("matrices/betting/power_dtr.npy", dtr)	
 np.save("matrices/betting/power_umi.npy", umi)	
 np.save("matrices/betting/power_emi.npy", emi)	
 np.save("matrices/betting/power_ville.npy", ville)	
+np.save("matrices/betting/power_rmi.npy", rmi)	
 

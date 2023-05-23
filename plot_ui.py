@@ -29,6 +29,7 @@ p_umi_ui     = np.load("matrices/ui/power_umi_ui.npy")
 p_sub_ui     = np.load("matrices/ui/power_sub_ui.npy")       
 p_umi_sub_ui = np.load("matrices/ui/power_umi_sub_ui.npy")       
 p_emi_sub_ui = np.load("matrices/ui/power_emi_sub_ui.npy")   
+p_rmi_sub_ui = np.load("matrices/ui/power_rmi_sub_ui.npy")   
 
 y_lrt        = np.sum(p_lrt       , axis=1)/reps       
 y_ui         = np.sum(p_ui        , axis=1)/reps       
@@ -36,6 +37,7 @@ y_umi_ui     = np.sum(p_umi_ui    , axis=1)/reps
 y_sub_ui     = np.sum(p_sub_ui    , axis=1)/reps
 y_umi_sub_ui = np.sum(p_umi_sub_ui, axis=1)/reps
 y_emi_sub_ui = np.sum(p_emi_sub_ui, axis=1)/reps
+y_rmi_sub_ui = np.sum(p_rmi_sub_ui, axis=1)/reps
 
 print(y_lrt)
 
@@ -47,6 +49,7 @@ plt.plot(eps, y_umi_ui, lw=lw, label="UMI-UI")
 plt.plot(eps, y_sub_ui, lw=lw, label="SUI")
 plt.plot(eps, y_umi_sub_ui, lw=lw, label="UMI-SUI")
 plt.plot(eps, y_emi_sub_ui, lw=lw, label="EMI-SUI")
+plt.plot(eps, y_rmi_sub_ui, lw=lw, label="EUMI-SUI")
 
 plt.xlabel("$\mu$",fontsize=text_size)
 plt.ylabel("Proportion of Rejections",fontsize=text_size)
@@ -55,7 +58,7 @@ plt.ylabel("Proportion of Rejections",fontsize=text_size)
 #order = [1,0,2]
 #plt.legend([handles[idx] for idx in order],[labels[idx] for idx in order],loc="upper right", prop={'size':text_size})
 
-plt.legend(loc="lower right", title="", prop={'size':text_size})
+plt.legend(loc="lower right", title="", prop={'size':text_size*0.9})
 
 plt.grid(True,alpha=.5)
 

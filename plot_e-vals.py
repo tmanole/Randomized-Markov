@@ -17,8 +17,9 @@ matplotlib.rcParams['font.family'] = 'STIXGeneral'
 p_dtr = np.load("matrices/e_vals/power_dtr.npy")/reps
 p_umi = np.load("matrices/e_vals/power_umi.npy")/reps
 p_emi = np.load("matrices/e_vals/power_emi.npy")/reps
+p_rmi = np.load("matrices/e_vals/power_rmi.npy")/reps
 
-mats = {"p_dtr": p_dtr, "p_umi": p_umi, "p_emi": p_emi}
+mats = {"p_dtr": p_dtr, "p_umi": p_umi, "p_emi": p_emi, "p_rmi": p_rmi}
 
 #### Make individual plots
 #
@@ -38,7 +39,7 @@ from mpl_toolkits.axes_grid1 import ImageGrid
 
 fig = plt.figure(figsize=(4., 4.))
 grid = ImageGrid(fig, 111,          
-                 nrows_ncols=(1, 3),
+                 nrows_ncols=(1, 4),
                  axes_pad=0.1,      
                  direction="row",
                  #add_all=True,
@@ -81,9 +82,9 @@ for rho in round_rhos[idr]:
     else:
         print_rhos.append(("%.1f" % rho))
 
-titles = ["Av+MI", "EMI", "UMI"]
+titles = ["Av+MI", "EMI", "UMI", "EUMI"]
 i = 0
-for ax, im in zip(grid, [p_dtr,p_emi,p_umi]):
+for ax, im in zip(grid, [p_dtr,p_emi,p_umi,p_rmi]):
     # Iterating over the grid returns the Axes.
     im = ax.imshow(im,cmap=cmap2,interpolation='none')   
 
@@ -112,7 +113,7 @@ plt.clf()
 
 fig = plt.figure(figsize=(4., 4.))
 grid = ImageGrid(fig, 111,
-                 nrows_ncols=(1, 2),
+                 nrows_ncols=(1, 3),
                  axes_pad=0.1,
                  direction="row",
                  cbar_location="right",
@@ -122,21 +123,26 @@ grid = ImageGrid(fig, 111,
                  )
 i = 0
 
-vmax = np.max([(p_emi-p_dtr),(p_umi-p_dtr)])
+vmax = np.max([(p_emi-p_dtr),(p_umi-p_dtr),(p_rmi-p_dtr)])
 
-for ax, im in zip(grid, [(p_emi-p_dtr),(p_umi-p_dtr)]):
+for ax, im in zip(grid, [(p_emi-p_dtr),(p_umi-p_dtr),(p_rmi-p_dtr)]):
     # Iterating over the grid returns the Axes.
     im = ax.imshow(im,cmap=cmap2,interpolation='nearest',vmin=0,vmax=vmax)   
 
     plt.sca(ax)
 
     if i == 0:
-        plt.title("EMI vs. Av+MI")
-        plt.xlabel("$\\rho$")
+        plt.title("EMI vs. Av+MI",fontsize=8)
         plt.ylabel("$\mu$")
+
+    elif i==1:
+        plt.title("UMI vs. Av+MI",fontsize=8)
+
     else:
-        plt.title("UMI vs. Av+MI")
-        plt.xlabel("$\\rho$")
+        plt.title("EUMI vs. Av+MI",fontsize=8)
+
+    plt.xlabel("$\\rho$")
+
 
     plt.yticks(idm, print_mus )
     plt.xticks(idr, print_rhos)

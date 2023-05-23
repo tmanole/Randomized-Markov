@@ -24,6 +24,7 @@ seed = 0
 p_dtr = np.empty([M, R])
 p_emi = np.empty([M, R])
 p_umi = np.empty([M, R])
+p_rmi = np.empty([M, R])   # EMI+UMI
 
 i = 0
 j = 0
@@ -33,6 +34,7 @@ for mu in mus:
         dtr = 0
         emi = 0 
         umi = 0
+        rmi = 0
 
         for rep in range(reps):
             e, x = generate_e_values(mu, rho, seed)
@@ -55,13 +57,17 @@ for mu in mus:
             if np.max(avgs) >= 1.0/alpha:
                 emi += 1
 
+            if e[0] >= u/alpha or np.max(avgs) >= 1.0/alpha:
+                rmi += 1
+
             seed += 1
 	
         p_dtr[i,j] = dtr	
         p_umi[i,j] = umi	
         p_emi[i,j] = emi	
+        p_rmi[i,j] = rmi	
 
-        print(i,j,dtr,umi,emi)
+        print(i,j,dtr,umi,emi,rmi)
 
         j += 1
 
@@ -71,3 +77,4 @@ for mu in mus:
 np.save("matrices/Ke_vals/power_dtr.npy", p_dtr)
 np.save("matrices/Ke_vals/power_umi.npy", p_umi)
 np.save("matrices/Ke_vals/power_emi.npy", p_emi)
+np.save("matrices/Ke_vals/power_rmi.npy", p_rmi)
